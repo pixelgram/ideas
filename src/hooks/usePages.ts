@@ -17,7 +17,6 @@ export default () => {
             return {
               id: doc.id,
               name: doc.data().name,
-              children: doc.data().children,
             }
           }),
         ),

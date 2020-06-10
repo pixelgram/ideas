@@ -1,15 +1,24 @@
-import React, { FC, ChangeEvent, FocusEvent, useState, useRef } from 'react'
+import React, {
+  FC,
+  ChangeEvent,
+  KeyboardEvent,
+  FocusEvent,
+  useState,
+  useRef,
+} from 'react'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import useNode from '../hooks/useNode'
-import { firestore } from '../firebase'
+import firebase, { firestore } from '../firebase'
 import { NODES } from '../firebase/collections'
 
 type Props = {
-  id: string
+  nodeId: string
 }
 
-const Node: FC<Props> = ({ id }) => {
-  const node = useNode(id)
+const Node: FC<Props> = ({ nodeId }) => {
+  const routerParams: { id: string } = useParams()
+  const node = useNode(nodeId)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [isChangeName, setIsChangeName] = useState(false)
@@ -31,18 +40,69 @@ const Node: FC<Props> = ({ id }) => {
     setInputValue(e.target.value)
   }
 
+  const onKeyDownInput = async (e: KeyboardEvent<HTMLInputElement>) => {
+    const ENTER_KEY_CODE = 13
+    if (e.keyCode === ENTER_KEY_CODE) {
+      if (node) {
+        const doc = await firestore.collection(NODES).add({
+          name: 'テスト',
+          children: [],
+          parentId: node.parentId,
+        })
+        await firestore.doc(`${NODES}/${node.parentId}`).update({
+          children: firebase.firestore.FieldValue.arrayUnion(doc.id),
+        })
+      }
+    }
+  }
+
+  const onClickAddChild = async () => {
+    if (node) {
+      const doc = await firestore.collection(NODES).add({
+        name: 'テスト',
+        children: [],
+        parentId: node.id,
+        pageId: routerParams.id,
+      })
+      firestore.doc(`${NODES}/${node.id}`).update({
+        children: firebase.firestore.FieldValue.arrayUnion(doc.id),
+      })
+    }
+  }
+
   const onBlurInput = (e: FocusEvent<HTMLInputElement>) => {
     setIsChangeName(false)
-    const docPath = `${NODES}/${id}`
+    const docPath = `${NODES}/${nodeId}`
     firestore
       .doc(docPath)
       .update({
-        ...node,
         name: inputValue,
       })
-      .then((res) => {
-        console.log('hoge')
-      })
+      .then((res) => {})
+  }
+
+  const onClickDeleteNode = () => {
+    if (node) {
+      const docPath = `${NODES}/${nodeId}`
+      if (node.parentId) {
+        firestore
+          .doc(`${NODES}/${node.parentId}`)
+          .update({
+            children: firebase.firestore.FieldValue.arrayRemove(nodeId),
+          })
+          .then(() => {
+            firestore
+              .doc(docPath)
+              .delete()
+              .then((res) => {})
+          })
+      } else {
+        firestore
+          .doc(docPath)
+          .delete()
+          .then((res) => {})
+      }
+    }
   }
 
   return (
@@ -56,10 +116,13 @@ const Node: FC<Props> = ({ id }) => {
             ref={inputRef}
             onChange={onChangeNodeName}
             onBlur={onBlurInput}
+            onKeyDown={onKeyDownInput}
           />
         )}
       </Card>
-      {node && node.children.map((id) => <Node key={id} id={id} />)}
+      <button onClick={onClickAddChild}>追加</button>
+      <button onClick={onClickDeleteNode}>削除</button>
+      {node && node.children.map((id) => <Node key={id} nodeId={id} />)}
     </Inner>
   )
 }
@@ -70,7 +133,12 @@ const Inner = styled.div`
 `
 
 const Input = styled.input`
+  appearance: none;
   font-size: 12px;
+  outline: none;
+  border: none;
+  line-height: 1;
+  height: 100%;
 `
 
 const Card = styled.div`

@@ -13,7 +13,6 @@ export default (id: string) => {
       setPage({
         id: snapshot.id,
         name: data ? data.name : '',
-        children: data ? data.children : [],
       })
     })
     return () => {

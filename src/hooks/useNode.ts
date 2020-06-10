@@ -13,6 +13,8 @@ export default (id: string) => {
         id: data.id,
         name: data.name,
         children: data.children,
+        parentId: data.parentId,
+        pageId: data.pageId,
       })
     })
     return () => {
