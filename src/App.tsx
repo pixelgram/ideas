@@ -5,7 +5,7 @@ import Index from './pages'
 import Id from './pages/id'
 const App: FC = () => {
   return (
-    <Inner>
+    <Layout>
       <BrowserRouter>
         <Switch>
           <Route path="/:id" expact>
@@ -16,12 +16,10 @@ const App: FC = () => {
           </Route>
         </Switch>
       </BrowserRouter>
-    </Inner>
+    </Layout>
   )
 }
 
-const Inner = styled.div`
-  padding: 16px;
-`
+const Layout = styled.div``
 
 export default App

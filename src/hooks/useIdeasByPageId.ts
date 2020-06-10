@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react'
 import { collection } from 'rxfire/firestore'
 import { firestore } from '../firebase'
-import { NODES } from '../firebase/collections'
-import { Node } from '../types'
+import { IDEAS } from '../firebase/collections'
+import { Idea } from '../types'
 import { map } from 'rxjs/operators'
 
-let defaultState: Node[] = []
+let defaultState: Idea[] = []
 
 export default (id: string) => {
-  const [nodes, setNodes] = useState(defaultState)
+  const [ideas, setIdeas] = useState(defaultState)
   useEffect(() => {
     const subscription = collection(
       firestore
-        .collection(NODES)
+        .collection(IDEAS)
         .where('pageId', '==', id)
         .where('parentId', '==', ''),
     )
@@ -25,19 +25,22 @@ export default (id: string) => {
               children: doc.data().children,
               parentId: doc.data().parentId,
               pageId: doc.data().pageId,
-            }
+              likeCount: doc.data().likeCount,
+              createdAt: doc.data().createdAt,
+              updatedAt: doc.data().updatedAt,
+            } as Idea
           }),
         ),
       )
-      .subscribe((nodes: Node[]) => {
-        setNodes(nodes)
+      .subscribe((ideas: Idea[]) => {
+        setIdeas(ideas)
       })
     return () => {
       subscription.unsubscribe()
     }
   }, [id])
 
-  defaultState = nodes
+  defaultState = ideas
 
-  return nodes
+  return ideas
 }

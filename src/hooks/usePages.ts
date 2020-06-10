@@ -17,7 +17,9 @@ export default () => {
             return {
               id: doc.id,
               name: doc.data().name,
-            }
+              createdAt: doc.data().createdAt,
+              updatedAt: doc.data().updatedAt,
+            } as Page
           }),
         ),
       )

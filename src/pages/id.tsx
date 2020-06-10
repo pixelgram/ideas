@@ -1,45 +1,53 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
-import Node from '../components/Node'
+import Idea from '../components/Idea'
+import Sidebar from '../containers/Sidebar'
 import usePage from '../hooks/usePage'
 import firebase, { firestore } from '../firebase'
-import { NODES, PAGES } from '../firebase/collections'
-import useNodesByPageId from '../hooks/useNodesByPageId'
+import { IDEAS, PAGES } from '../firebase/collections'
+import useNodesByPageId from '../hooks/useIdeasByPageId'
 const Id: FC = () => {
   const { id } = useParams()
   const page = usePage(id)
-  const nodes = useNodesByPageId(id)
+  const ideas = useNodesByPageId(id)
 
   const onClickAddNode = async () => {
     if (page) {
-      const doc = await firestore.collection(NODES).add({
-        name: 'テスト',
+      firestore.collection(IDEAS).add({
+        name: '新しいアイデア',
         children: [],
         parentId: '',
         pageId: page.id,
-      })
-      const docPath = `${PAGES}/${page.id}`
-      firestore.doc(docPath).update({
-        children: firebase.firestore.FieldValue.arrayUnion(doc.id),
+        likeCount: 0,
       })
     }
   }
 
   return (
-    <div>
-      {page && (
-        <div>
-          <PageName>{page.name}</PageName>
-          <button onClick={onClickAddNode}>追加</button>
-          {nodes.map((node) => (
-            <Node key={node.id} nodeId={node.id} />
-          ))}
-        </div>
-      )}
-    </div>
+    <Layout>
+      <Main>
+        {page && (
+          <div>
+            <PageName>{page.name}</PageName>
+            <button onClick={onClickAddNode}>追加</button>
+            {ideas.map((idea) => (
+              <Idea key={idea.id} ideaId={idea.id} />
+            ))}
+          </div>
+        )}
+      </Main>
+      <Sidebar pageId={id} />
+    </Layout>
   )
 }
+
+const Layout = styled.div`
+  display: flex;
+`
+const Main = styled.div`
+  width: calc(100vw - 400px);
+`
 
 const PageName = styled.div`
   display: inline-block;
