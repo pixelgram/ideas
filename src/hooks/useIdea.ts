@@ -14,7 +14,7 @@ export default (id: string) => {
         name: data.name,
         children: data.children,
         parentId: data.parentId,
-        pageId: data.pageId,
+        themeId: data.themeId,
         likeCount: data.likeCount,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,

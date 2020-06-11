@@ -8,6 +8,9 @@ import AddIcon from '../components/AddIcon'
 import DeleteIcon from '../components/DeleteIcon'
 import LikeButton from './LikeButton'
 import IconButton from '../components/IconButton'
+import LabelInput from './LabelInput'
+import updateIdea from '../firebase/updateIdea'
+import { UpdateIdeaData } from '../firebase/types'
 
 type Props = {
   ideaId: string
@@ -16,26 +19,6 @@ type Props = {
 const Idea: FC<Props> = ({ ideaId }) => {
   const routerParams: { id: string } = useParams()
   const idea = useIdea(ideaId)
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  const [isChangeName, setIsChangeName] = useState(false)
-  const [inputValue, setInputValue] = useState('')
-
-  const onClickIdea = () => {
-    if (idea) {
-      setInputValue(idea.name)
-    }
-    setIsChangeName(true)
-    setTimeout(() => {
-      if (inputRef && inputRef.current) {
-        inputRef.current.focus()
-      }
-    }, 0)
-  }
-
-  const onChangeIdeaName = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value)
-  }
 
   const onClickAddChild = async () => {
     if (idea) {
@@ -43,7 +26,7 @@ const Idea: FC<Props> = ({ ideaId }) => {
         name: '新しいアイデア',
         children: [],
         parentId: idea.id,
-        pageId: routerParams.id,
+        themeId: routerParams.id,
         likeCount: 0,
       })
       firestore.doc(`${IDEAS}/${idea.id}`).update({
@@ -52,23 +35,26 @@ const Idea: FC<Props> = ({ ideaId }) => {
     }
   }
 
-  const onBlurInput = (e: FocusEvent<HTMLInputElement>) => {
-    setIsChangeName(false)
-    const docPath = `${IDEAS}/${ideaId}`
-    firestore
-      .doc(docPath)
-      .update({
-        name: inputValue,
-      })
-      .then((res) => {})
-  }
-
   const onClickLike = () => {
     if (idea) {
       const docPath = `${IDEAS}/${ideaId}`
       firestore.doc(docPath).update({
         likeCount: firebase.firestore.FieldValue.increment(1),
       })
+    }
+  }
+
+  const onBlurChangeIdeaName = (
+    value: string,
+  ): Promise<UpdateIdeaData | null> => {
+    if (!idea) return Promise.resolve(null)
+    const isChanged = idea.name !== value
+    if (isChanged) {
+      return updateIdea(idea.id, {
+        name: value,
+      })
+    } else {
+      return Promise.resolve(null)
     }
   }
 
@@ -101,18 +87,7 @@ const Idea: FC<Props> = ({ ideaId }) => {
       {idea && (
         <Container>
           <Content>
-            <Card onClick={onClickIdea}>
-              {!isChangeName && idea.name}
-              {isChangeName && (
-                <Input
-                  type="text"
-                  value={inputValue}
-                  ref={inputRef}
-                  onChange={onChangeIdeaName}
-                  onBlur={onBlurInput}
-                />
-              )}
-            </Card>
+            <LabelInput onBlur={onBlurChangeIdeaName} value={idea.name} />
             <ButtonGroup>
               <ButtonOuter>
                 <LikeButton onClick={onClickLike} count={idea.likeCount} />
@@ -142,15 +117,6 @@ const Inner = styled.div`
   margin-left: 64px;
 `
 
-const Input = styled.input`
-  appearance: none;
-  font-size: 12px;
-  outline: none;
-  border: none;
-  line-height: 1;
-  height: 100%;
-`
-
 const Container = styled.div`
   position: relative;
   margin-bottom: 24px;
@@ -172,13 +138,6 @@ const Content = styled.div`
     background-color: #f3f3f3;
     transform: translateY(-50%);
   }
-`
-
-const Card = styled.div`
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-  padding: 8px;
-  display: inline-block;
-  font-size: 12px;
 `
 
 const ButtonOuter = styled.div`

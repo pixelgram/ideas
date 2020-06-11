@@ -4,25 +4,28 @@ import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import Idea from '../containers/Idea'
 import Sidebar from '../containers/Sidebar'
-import usePage from '../hooks/usePage'
+import useTheme from '../hooks/useTheme'
 import useIdeasByPageId from '../hooks/useIdeasByPageId'
 import createIdea from '../firebase/createIdea'
 import DeleteIcon from '../components/DeleteIcon'
 import IconButton from '../components/IconButton'
 import AddIcon from '../components/AddIcon'
 import deleteTheme from '../firebase/deleteTheme'
+import LabelInput from '../containers/LabelInput'
+import { UpdateIdeaData } from '../firebase/types'
+import updateTheme from '../firebase/updateTheme'
 const Id: FC = () => {
   const { id } = useParams()
-  const page = usePage(id)
+  const theme = useTheme(id)
   const ideas = useIdeasByPageId(id)
   const history = useHistory()
 
   const onClickAddIdea = async () => {
-    if (page) {
+    if (theme) {
       const data = {
         name: '新しいアイデア',
         parentId: '',
-        pageId: page.id,
+        themeId: theme.id,
       }
       createIdea(data).then(() => {})
     }
@@ -34,15 +37,32 @@ const Id: FC = () => {
     })
   }
 
+  const onBlurChangeThemeName = (
+    value: string,
+  ): Promise<UpdateIdeaData | null> => {
+    if (!theme) return Promise.resolve(null)
+    const isChanged = theme.name !== value
+    if (isChanged) {
+      return updateTheme(theme.id, {
+        name: value,
+      })
+    } else {
+      return Promise.resolve(null)
+    }
+  }
+
   return (
     <Layout>
       <Main>
         <MainInner>
-          {page && (
+          {theme && (
             <>
               <MainBody>
                 <Theme>
-                  <ThemeName>{page.name}</ThemeName>
+                  <LabelInput
+                    onBlur={onBlurChangeThemeName}
+                    value={theme.name}
+                  />
                   <ButtonGroup>
                     <ButtonOuter>
                       <IconButton onClick={onClickAddIdea}>
@@ -66,7 +86,7 @@ const Id: FC = () => {
           )}
         </MainInner>
       </Main>
-      <Sidebar pageId={id} />
+      <Sidebar themeId={id} />
     </Layout>
   )
 }

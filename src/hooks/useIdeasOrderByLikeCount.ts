@@ -16,7 +16,7 @@ export default (id: string) => {
     const subscription = collection(
       firestore
         .collection(IDEAS)
-        .where('pageId', '==', id)
+        .where('themeId', '==', id)
         .orderBy('likeCount', 'desc'),
     )
       .pipe(
@@ -27,7 +27,7 @@ export default (id: string) => {
               name: doc.data().name,
               children: doc.data().children,
               parentId: doc.data().parentId,
-              pageId: doc.data().pageId,
+              themeId: doc.data().pageId,
               likeCount: doc.data().likeCount,
               createdAt: day(timestampToDate(doc.data().createdAt)).format(
                 DATE_FORMAT,

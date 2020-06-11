@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import useIdeasOrderByLikeCount from '../hooks/useIdeasOrderByLikeCount'
 
 type Props = {
-  pageId: string
+  themeId: string
 }
 
-const Sidebar: FC<Props> = ({ pageId }) => {
-  const mostLikeNodes = useIdeasOrderByLikeCount(pageId)
+const Sidebar: FC<Props> = ({ themeId }) => {
+  const mostLikeNodes = useIdeasOrderByLikeCount(themeId)
   return (
     <Layout>
       <Header>もっともいいね！されたアイデア</Header>

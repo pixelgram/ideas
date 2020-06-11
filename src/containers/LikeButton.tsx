@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
+import React, { FC, MouseEvent } from 'react'
 import LikeIcon from '../components/LikeIcon'
 import styled from 'styled-components'
 
 type Props = {
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void
   count: number
 }
 

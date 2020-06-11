@@ -5,7 +5,7 @@ export type Idea = {
   name: string
   children: id[]
   parentId: id
-  pageId: id
+  themeId: id
   likeCount: number
   createdAt: string
   updatedAt: string

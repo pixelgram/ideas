@@ -5,17 +5,17 @@ import { IDEAS } from './collections'
 type args = {
   name: string
   parentId: string
-  pageId: string
+  themeId: string
 }
 
-export default ({ name, parentId, pageId }: args) => {
+export default ({ name, parentId, themeId }: args) => {
   const id = firestore.collection(IDEAS).doc().id
   const idea: CreateIdeaData = {
     id,
     name,
     children: [],
     parentId: parentId,
-    pageId: pageId,
+    themeId: themeId,
     likeCount: 0,
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
