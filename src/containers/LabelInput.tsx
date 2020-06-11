@@ -36,7 +36,10 @@ const LabelInput: FC<Props> = ({ onBlur, value }) => {
     <Label onClick={onClick}>
       <LabelInner>
         <LabelContent>
-          {!isTyping && <LabelBody>{value}</LabelBody>}
+          {!isTyping && !inputValue && (
+            <LabelPlaceholder>名称未設定</LabelPlaceholder>
+          )}
+          {!isTyping && inputValue && <LabelBody>{value}</LabelBody>}
           {isTyping && (
             <Input
               onChange={onChange}
@@ -46,7 +49,9 @@ const LabelInput: FC<Props> = ({ onBlur, value }) => {
             />
           )}
         </LabelContent>
-        <LabelSizer>{isTyping ? inputValue : value}</LabelSizer>
+        <LabelSizer>
+          {isTyping ? inputValue : inputValue ? value : '名称未設定'}
+        </LabelSizer>
       </LabelInner>
     </Label>
   )
@@ -76,12 +81,19 @@ const LabelBody = styled.div`
   height: 20px;
 `
 
+const LabelPlaceholder = styled.div`
+  line-height: 20px;
+  height: 20px;
+  color: ${(props) => props.theme.colors.TEXT_GRAY};
+`
+
 const LabelSizer = styled.div`
   opacity: 0;
   pointer-events: none;
   font-size: 12px;
   line-height: 20px;
   height: 20px;
+  min-width: 10px;
 `
 
 const Input = styled.input`
@@ -91,6 +103,7 @@ const Input = styled.input`
   border: none;
   line-height: 20px;
   height: 20px;
+  min-width: 10px;
   width: 100%;
 `
 

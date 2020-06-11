@@ -36,12 +36,10 @@ const Idea: FC<Props> = ({ ideaId }) => {
   }
 
   const onClickLike = () => {
-    if (idea) {
-      const docPath = `${IDEAS}/${ideaId}`
-      firestore.doc(docPath).update({
-        likeCount: firebase.firestore.FieldValue.increment(1),
-      })
-    }
+    if (!idea) return false
+    updateIdea(ideaId, {
+      likeCount: firebase.firestore.FieldValue.increment(1),
+    }).then(() => {})
   }
 
   const onBlurChangeIdeaName = (

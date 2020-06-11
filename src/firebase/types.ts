@@ -25,6 +25,7 @@ export type CreateIdeaData = {
 }
 
 export type UpdateIdeaData = {
-  name: string
+  name?: string
+  likeCount?: firestore.FieldValue
   updatedAt: firestore.FieldValue
 }

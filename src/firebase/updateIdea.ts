@@ -3,14 +3,18 @@ import { UpdateIdeaData } from './types'
 import { IDEAS } from './collections'
 
 type args = {
-  name: string
+  name?: string
+  likeCount?: firebase.firestore.FieldValue
 }
 
-export default (id: string, { name }: args) => {
+export default (id: string, { name, likeCount }: args) => {
   const idea: UpdateIdeaData = {
-    name,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
   }
+
+  if (name) idea.name = name
+  if (likeCount) idea.likeCount = likeCount
+
   return firestore
     .doc(`${IDEAS}/${id}`)
     .update(idea)
