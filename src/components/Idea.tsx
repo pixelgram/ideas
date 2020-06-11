@@ -4,6 +4,9 @@ import styled from 'styled-components'
 import useIdea from '../hooks/useIdea'
 import firebase, { firestore } from '../firebase'
 import { IDEAS } from '../firebase/collections'
+import AddIcon from './AddIcon'
+import DeleteIcon from './DeleteIcon'
+import LikeIcon from './LikeIcon'
 
 type Props = {
   ideaId: string
@@ -36,7 +39,7 @@ const Idea: FC<Props> = ({ ideaId }) => {
   const onClickAddChild = async () => {
     if (idea) {
       const doc = await firestore.collection(IDEAS).add({
-        name: '新しいノード',
+        name: '新しいアイデア',
         children: [],
         parentId: idea.id,
         pageId: routerParams.id,
@@ -96,24 +99,43 @@ const Idea: FC<Props> = ({ ideaId }) => {
   return (
     <Inner>
       {idea && (
-        <div>
-          <Card onClick={onClickIdea}>
-            {!isChangeName && idea.name}
-            {isChangeName && (
-              <Input
-                type="text"
-                value={inputValue}
-                ref={inputRef}
-                onChange={onChangeIdeaName}
-                onBlur={onBlurInput}
-              />
-            )}
-          </Card>
-          <button onClick={onClickAddChild}>追加</button>
-          <button onClick={onClickDeleteIdea}>削除</button>
-          <button onClick={onClickLike}>いいね + {idea.likeCount}</button>
-          {idea && idea.children.map((id) => <Idea key={id} ideaId={id} />)}
-        </div>
+        <Container>
+          <Content>
+            <Card onClick={onClickIdea}>
+              {!isChangeName && idea.name}
+              {isChangeName && (
+                <Input
+                  type="text"
+                  value={inputValue}
+                  ref={inputRef}
+                  onChange={onChangeIdeaName}
+                  onBlur={onBlurInput}
+                />
+              )}
+            </Card>
+            <ButtonGroup>
+              <ButtonOuter>
+                <LikeButton onClick={onClickLike}>
+                  <LikeIcon />
+                  <LikeCount>{idea.likeCount}</LikeCount>
+                </LikeButton>
+              </ButtonOuter>
+              <ButtonOuter>
+                <IconButton onClick={onClickAddChild}>
+                  <AddIcon />
+                </IconButton>
+              </ButtonOuter>
+              <ButtonOuter>
+                <IconButton onClick={onClickDeleteIdea}>
+                  <DeleteIcon />
+                </IconButton>
+              </ButtonOuter>
+            </ButtonGroup>
+          </Content>
+          <IdeaGroup>
+            {idea && idea.children.map((id) => <Idea key={id} ideaId={id} />)}
+          </IdeaGroup>
+        </Container>
       )}
     </Inner>
   )
@@ -121,7 +143,6 @@ const Idea: FC<Props> = ({ ideaId }) => {
 
 const Inner = styled.div`
   margin-left: 64px;
-  margin-bottom: 8px;
 `
 
 const Input = styled.input`
@@ -133,12 +154,89 @@ const Input = styled.input`
   height: 100%;
 `
 
+const Container = styled.div`
+  position: relative;
+  margin-bottom: 24px;
+`
+
+const Content = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: -32px;
+    width: 20px;
+    height: 2px;
+    background-color: #f3f3f3;
+    transform: translateY(-50%);
+  }
+`
+
 const Card = styled.div`
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
   padding: 8px;
-  margin-bottom: 16px;
   display: inline-block;
   font-size: 12px;
+`
+
+const LikeButton = styled.button`
+  appearance: none;
+  border: none;
+  border-radius: 100px;
+  padding: 0 16px;
+  height: 32px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  outline: none;
+  display: flex;
+  align-items: center;
+`
+
+const LikeCount = styled.div`
+  font-weight: bold;
+  margin-left: 4px;
+`
+
+const IconButton = styled.button`
+  appearance: none;
+  border: none;
+  border-radius: 100%;
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  outline: none;
+`
+
+const ButtonOuter = styled.div`
+  display: inline-block;
+  margin-left: 8px;
+`
+
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+`
+
+const IdeaGroup = styled.div`
+  position: relative;
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: calc(50% - 16px);
+    left: 16px;
+    width: 2px;
+    height: 100%;
+    background-color: #f3f3f3;
+    transform: translateY(-50%);
+  }
 `
 
 export default Idea

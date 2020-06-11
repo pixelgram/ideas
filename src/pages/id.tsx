@@ -27,15 +27,19 @@ const Id: FC = () => {
   return (
     <Layout>
       <Main>
-        {page && (
-          <div>
-            <PageName>{page.name}</PageName>
-            <button onClick={onClickAddNode}>追加</button>
-            {ideas.map((idea) => (
-              <Idea key={idea.id} ideaId={idea.id} />
-            ))}
-          </div>
-        )}
+        <MainInner>
+          {page && (
+            <>
+              <MainHeader>{page.name}</MainHeader>
+              <MainBody>
+                <button onClick={onClickAddNode}>追加</button>
+                {ideas.map((idea) => (
+                  <Idea key={idea.id} ideaId={idea.id} />
+                ))}
+              </MainBody>
+            </>
+          )}
+        </MainInner>
       </Main>
       <Sidebar pageId={id} />
     </Layout>
@@ -46,16 +50,27 @@ const Layout = styled.div`
   display: flex;
 `
 const Main = styled.div`
+  overflow: scroll;
   width: calc(100vw - 400px);
+  height: 100vh;
 `
 
-const PageName = styled.div`
-  display: inline-block;
-  margin-bottom: 24px;
-  background-color: #0070f3;
+const MainInner = styled.div`
+  width: max-content;
+  min-width: 100%;
+`
+
+const MainHeader = styled.div`
+  position: sticky;
+  top: 0;
+  background-color: #ff5103;
   color: #fff;
-  padding: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  font-weight: bold;
+`
+
+const MainBody = styled.div`
+  padding: 24px;
 `
 
 export default Id

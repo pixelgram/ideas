@@ -12,7 +12,7 @@ const Sidebar: FC<Props> = ({ pageId }) => {
     <Layout>
       <Header>もっともいいね！されたアイデア</Header>
       {mostLikeNodes.map((idea) => (
-        <Idea>
+        <Idea key={idea.id}>
           {idea.name} - いいね（{idea.likeCount}）
         </Idea>
       ))}
@@ -32,7 +32,9 @@ const Layout = styled.div`
 `
 
 const Header = styled.div`
-  background-color: #ff5103;
+  position: sticky;
+  top: 0;
+  background-color: #000;
   color: #fff;
   padding: 16px;
   font-weight: bold;
