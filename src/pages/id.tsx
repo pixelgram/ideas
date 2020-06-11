@@ -30,9 +30,8 @@ const Id: FC = () => {
         <MainInner>
           {page && (
             <>
-              <MainHeader>{page.name}</MainHeader>
               <MainBody>
-                <button onClick={onClickAddNode}>追加</button>
+                <ThemeName>{page.name}</ThemeName>
                 {ideas.map((idea) => (
                   <Idea key={idea.id} ideaId={idea.id} />
                 ))}
@@ -60,13 +59,15 @@ const MainInner = styled.div`
   min-width: 100%;
 `
 
-const MainHeader = styled.div`
-  position: sticky;
-  top: 0;
+const ThemeName = styled.div`
+  display: inline-block;
   background-color: #ff5103;
   color: #fff;
-  padding: 16px;
   font-weight: bold;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  padding: 8px;
+  font-size: 12px;
+  margin-bottom: 24px;
 `
 
 const MainBody = styled.div`

@@ -1,37 +1,43 @@
 import React, { FC } from 'react'
+import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
 import usePages from '../hooks/usePages'
 import { Link } from 'react-router-dom'
-import firebase, { firestore } from '../firebase'
-import { PAGES } from '../firebase/collections'
+import createTheme from '../firebase/createTheme'
+import ThemeCard from '../containers/ThemeCard'
+import Button from '../components/Button'
 import { Page } from '../types'
 
-const Home: FC = () => {
+const Index: FC = () => {
   const pages = usePages()
+  const history = useHistory()
   const onClickCreatePage = () => {
-    const id = firestore.collection(PAGES).doc().id
-    const pageDate: Page = {
-      id,
-      name: '新しいページ',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    }
-    firestore
-      .doc(`${PAGES}/${id}`)
-      .set(pageDate)
-      .then(() => {})
+    createTheme('新しいテーマ').then(({ id }) => {
+      history.push(`/${id}`)
+    })
   }
   return (
-    <div>
-      {pages.map((page: any) => (
-        <div key={page.id}>
-          <Link to={`/${page.id}`}>{page.name}</Link>
-        </div>
-      ))}
-      <div>
-        <button onClick={onClickCreatePage}>新しいページを作る</button>
-      </div>
-    </div>
+    <Container>
+      <ThemeGroup>
+        {pages.map((page: Page) => (
+          <Link to={`/${page.id}`}>
+            <ThemeCard
+              key={page.id}
+              name={page.name ? page.name : '名称未設定'}
+              date={page.createdAt}
+            />
+          </Link>
+        ))}
+      </ThemeGroup>
+      <Button onClick={onClickCreatePage}>新しいテーマを作る</Button>
+    </Container>
   )
 }
 
-export default Home
+const Container = styled.div`
+  padding: 24px;
+`
+
+const ThemeGroup = styled.div``
+
+export default Index

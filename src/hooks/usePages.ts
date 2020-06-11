@@ -4,6 +4,8 @@ import { firestore } from '../firebase'
 import { PAGES } from '../firebase/collections'
 import { Page } from '../types'
 import { map } from 'rxjs/operators'
+import day from 'dayjs'
+import { DATE_FORMAT } from '../constants'
 
 let defaultState: Page[] = []
 
@@ -17,8 +19,8 @@ export default () => {
             return {
               id: doc.id,
               name: doc.data().name,
-              createdAt: doc.data().createdAt,
-              updatedAt: doc.data().updatedAt,
+              createdAt: day(doc.data().createdAt.toDate()).format(DATE_FORMAT),
+              updatedAt: day(doc.data().updatedAt.toDate()).format(DATE_FORMAT),
             } as Page
           }),
         ),

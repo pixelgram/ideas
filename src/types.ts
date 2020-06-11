@@ -16,6 +16,6 @@ export type Idea = {
 export type Page = {
   id: id
   name: string
-  createdAt: firestore.FieldValue
-  updatedAt: firestore.FieldValue
+  createdAt: string
+  updatedAt: string
 }

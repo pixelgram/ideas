@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
+import theme from './themes'
 import Index from './pages'
 import Id from './pages/id'
 const App: FC = () => {
   return (
-    <Layout>
+    <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Switch>
           <Route path="/:id" expact>
@@ -16,10 +17,8 @@ const App: FC = () => {
           </Route>
         </Switch>
       </BrowserRouter>
-    </Layout>
+    </ThemeProvider>
   )
 }
-
-const Layout = styled.div``
 
 export default App
