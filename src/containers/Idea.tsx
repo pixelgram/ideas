@@ -4,9 +4,10 @@ import styled from 'styled-components'
 import useIdea from '../hooks/useIdea'
 import firebase, { firestore } from '../firebase'
 import { IDEAS } from '../firebase/collections'
-import AddIcon from './AddIcon'
-import DeleteIcon from './DeleteIcon'
-import LikeIcon from './LikeIcon'
+import AddIcon from '../components/AddIcon'
+import DeleteIcon from '../components/DeleteIcon'
+import LikeButton from './LikeButton'
+import IconButton from '../components/IconButton'
 
 type Props = {
   ideaId: string
@@ -63,7 +64,6 @@ const Idea: FC<Props> = ({ ideaId }) => {
   }
 
   const onClickLike = () => {
-    console.log(1)
     if (idea) {
       const docPath = `${IDEAS}/${ideaId}`
       firestore.doc(docPath).update({
@@ -115,10 +115,7 @@ const Idea: FC<Props> = ({ ideaId }) => {
             </Card>
             <ButtonGroup>
               <ButtonOuter>
-                <LikeButton onClick={onClickLike}>
-                  <LikeIcon />
-                  <LikeCount>{idea.likeCount}</LikeCount>
-                </LikeButton>
+                <LikeButton onClick={onClickLike} count={idea.likeCount} />
               </ButtonOuter>
               <ButtonOuter>
                 <IconButton onClick={onClickAddChild}>
@@ -182,35 +179,6 @@ const Card = styled.div`
   padding: 8px;
   display: inline-block;
   font-size: 12px;
-`
-
-const LikeButton = styled.button`
-  appearance: none;
-  border: none;
-  border-radius: 100px;
-  padding: 0 16px;
-  height: 32px;
-  background-color: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  outline: none;
-  display: flex;
-  align-items: center;
-`
-
-const LikeCount = styled.div`
-  font-weight: bold;
-  margin-left: 4px;
-`
-
-const IconButton = styled.button`
-  appearance: none;
-  border: none;
-  border-radius: 100%;
-  width: 32px;
-  height: 32px;
-  background-color: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  outline: none;
 `
 
 const ButtonOuter = styled.div`

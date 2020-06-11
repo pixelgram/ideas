@@ -1,16 +1,16 @@
 import firebase, { firestore } from './index'
-import { CreateTheme } from './types'
-import { PAGES } from './collections'
+import { CreateThemeData } from './types'
+import { THEMES } from './collections'
 export default (name: string = '') => {
-  const id = firestore.collection(PAGES).doc().id
-  const theme: CreateTheme = {
+  const id = firestore.collection(THEMES).doc().id
+  const theme: CreateThemeData = {
     id,
     name,
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
   }
   return firestore
-    .doc(`${PAGES}/${id}`)
+    .doc(`${THEMES}/${id}`)
     .set(theme)
     .then(() => {
       return theme

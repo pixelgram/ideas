@@ -1,2 +1,2 @@
-export const PAGES = 'pages'
+export const THEMES = 'themes'
 export const IDEAS = 'ideas'

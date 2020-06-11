@@ -1,5 +1,3 @@
-import { firestore } from 'firebase/app'
-
 export type id = string
 
 export type Idea = {
@@ -9,11 +7,11 @@ export type Idea = {
   parentId: id
   pageId: id
   likeCount: number
-  createdAt: firestore.FieldValue
-  updatedAt: firestore.FieldValue
+  createdAt: string
+  updatedAt: string
 }
 
-export type Page = {
+export type Theme = {
   id: id
   name: string
   createdAt: string

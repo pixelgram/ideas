@@ -4,6 +4,9 @@ import { firestore } from '../firebase'
 import { IDEAS } from '../firebase/collections'
 import { Idea } from '../types'
 import { map } from 'rxjs/operators'
+import day from 'dayjs'
+import { DATE_FORMAT } from '../constants'
+import timestampToDate from '../firebase/timestampToDate'
 
 let defaultState: Idea[] = []
 
@@ -19,6 +22,7 @@ export default (id: string) => {
       .pipe(
         map((docs) =>
           docs.map((doc) => {
+            console.log(doc)
             return {
               id: doc.id,
               name: doc.data().name,
@@ -26,8 +30,12 @@ export default (id: string) => {
               parentId: doc.data().parentId,
               pageId: doc.data().pageId,
               likeCount: doc.data().likeCount,
-              createdAt: doc.data().createdAt,
-              updatedAt: doc.data().updatedAt,
+              createdAt: day(timestampToDate(doc.data().createdAt)).format(
+                DATE_FORMAT,
+              ),
+              updatedAt: day(timestampToDate(doc.data().updatedAt)).format(
+                DATE_FORMAT,
+              ),
             } as Idea
           }),
         ),

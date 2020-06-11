@@ -18,8 +18,8 @@ const ThemeCard: FC<Props> = ({ name, date }) => {
 const Card = styled.div`
   padding: 16px;
   margin-bottom: 16px;
-  background-color: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  background-color: ${(props) => props.theme.colors.BG_WHITE};
+  box-shadow: ${(props) => props.theme.colors.LIGHT_SHADOW};
 `
 
 const CardName = styled.div`
