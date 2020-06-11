@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import Idea from '../containers/Idea'
@@ -10,6 +10,7 @@ import createIdea from '../firebase/createIdea'
 import DeleteIcon from '../components/DeleteIcon'
 import IconButton from '../components/IconButton'
 import AddIcon from '../components/AddIcon'
+import BackIcon from '../components/BackIcon'
 import deleteTheme from '../firebase/deleteTheme'
 import LabelInput from '../containers/LabelInput'
 import { UpdateIdeaData } from '../firebase/types'
@@ -85,6 +86,13 @@ const Id: FC = () => {
             </>
           )}
         </MainInner>
+        <MainBackButtonOuter>
+          <Link to="/">
+            <MainBackButton>
+              <BackIcon />
+            </MainBackButton>
+          </Link>
+        </MainBackButtonOuter>
       </Main>
       <Sidebar themeId={id} />
     </Layout>
@@ -111,14 +119,21 @@ const Theme = styled.div`
   margin-bottom: 24px;
 `
 
-const ThemeName = styled.div`
-  display: inline-block;
-  background-color: #ff5103;
-  color: #fff;
-  font-weight: bold;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-  padding: 8px;
-  font-size: 12px;
+const MainBackButtonOuter = styled.div`
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+`
+
+const MainBackButton = styled.button`
+  appearance: none;
+  border: none;
+  border-radius: 100%;
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  outline: none;
 `
 
 const MainBody = styled.div`

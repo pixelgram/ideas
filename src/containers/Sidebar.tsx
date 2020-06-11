@@ -23,13 +23,13 @@ const Sidebar: FC<Props> = ({ themeId }) => {
       {mostLikeNodes.map((idea) => (
         <Idea key={idea.id}>
           <IdeaName>{idea.name}</IdeaName>
-          <IdeaDate>{idea.createdAt}</IdeaDate>
-          <IdeaButtonOuter>
+          <IdeaFooter>
+            <IdeaDate>{idea.createdAt}</IdeaDate>
             <LikeButton
               onClick={() => onClickLike(idea.id)}
               count={idea.likeCount}
             />
-          </IdeaButtonOuter>
+          </IdeaFooter>
         </Idea>
       ))}
     </Layout>
@@ -65,18 +65,19 @@ const Idea = styled.div`
 
 const IdeaName = styled.div`
   font-size: 14px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
+  line-height: 1.5;
 `
 
 const IdeaDate = styled.div`
   font-size: 12px;
-  margin-bottom: 16px;
   color: ${(props) => props.theme.colors.TEXT_GRAY};
 `
 
-const IdeaButtonOuter = styled.div`
+const IdeaFooter = styled.div`
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
 `
 
 export default Sidebar

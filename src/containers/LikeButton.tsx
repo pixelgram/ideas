@@ -17,6 +17,7 @@ const LikeButton: FC<Props> = ({ onClick, count }) => {
 }
 
 const LikeButtonBody = styled.button`
+  user-select: none;
   appearance: none;
   border: none;
   border-radius: 100px;

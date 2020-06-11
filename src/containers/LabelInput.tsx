@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, FocusEvent, useRef, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { UpdateIdeaData } from '../firebase/types'
 
 type Props = {
@@ -33,7 +33,7 @@ const LabelInput: FC<Props> = ({ onBlur, value }) => {
   }
 
   return (
-    <Label onClick={onClick}>
+    <Label onClick={onClick} isActive={isTyping}>
       <LabelInner>
         <LabelContent>
           {!isTyping && !inputValue && (
@@ -57,9 +57,16 @@ const LabelInput: FC<Props> = ({ onBlur, value }) => {
   )
 }
 
-const Label = styled.div`
+const Label = styled.div<any>`
+  cursor: pointer;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
   padding: 8px;
+  user-select: none;
+  ${(props: { isActive: boolean }) =>
+    props.isActive &&
+    css`
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.18);
+    `}
 `
 
 const LabelInner = styled.div`
