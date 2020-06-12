@@ -5,7 +5,7 @@ import { IDEAS } from '../firebase/collections'
 import { Idea } from '../types'
 import { map } from 'rxjs/operators'
 import day from 'dayjs'
-import { DATE_FORMAT } from '../constants'
+import { DATETIME_FORMAT } from '../constants'
 import timestampToDate from '../firebase/timestampToDate'
 
 let defaultState: Idea[] = []
@@ -31,10 +31,10 @@ export default (id: string) => {
               themeId: doc.data().pageId,
               likeCount: doc.data().likeCount,
               createdAt: day(timestampToDate(doc.data().createdAt)).format(
-                DATE_FORMAT,
+                DATETIME_FORMAT,
               ),
               updatedAt: day(timestampToDate(doc.data().updatedAt)).format(
-                DATE_FORMAT,
+                DATETIME_FORMAT,
               ),
             } as Idea
           }),

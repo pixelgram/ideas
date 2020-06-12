@@ -1,5 +1,4 @@
-import firebase, { firestore } from './index'
-import { CreateThemeData } from './types'
+import { firestore } from './index'
 import { THEMES } from './collections'
 export default (id: string = '') => {
   return firestore

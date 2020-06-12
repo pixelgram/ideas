@@ -2,8 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import useIdeasOrderByLikeCount from '../hooks/useIdeasOrderByLikeCount'
 import LikeButton from './LikeButton'
-import { IDEAS } from '../firebase/collections'
-import firebase, { firestore } from '../firebase'
+import firebase from '../firebase'
 import updateIdea from '../firebase/updateIdea'
 
 type Props = {

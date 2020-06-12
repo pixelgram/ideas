@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, FocusEvent, useState, useRef } from 'react'
+import React, { FC } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import useIdea from '../hooks/useIdea'

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import styled, { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from 'styled-components'
 import theme from './themes'
 import Index from './pages'
 import Id from './pages/id'
